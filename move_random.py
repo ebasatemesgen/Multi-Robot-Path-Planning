@@ -2,13 +2,18 @@ import random
 import rospy
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
+from nav_msgs.msg import Odometry
+from std_msgs.msg import String
 
 class Turtlebot:
     def __init__(self, name):
         self.name = name
         self.move_random = Twist()
-        self.pub = rospy.Publisher(f"/{name}/cmd_vel", Twist, queue_size=10)
-        self.sub = rospy.Subscriber(f"/{name}/scan", LaserScan, self.callback)
+        self.pub_cmd_vel = rospy.Publisher(f"/{name}/cmd_vel", Twist, queue_size=10)
+        self.pub_location = rospy.Publisher("/turtlebot_locations", String, queue_size=10)
+        self.sub_scan = rospy.Subscriber(f"/{name}/scan", LaserScan, self.callback)
+        self.sub_odom = rospy.Subscriber(f"/{name}/odom", Odometry, self.odom_callback)
+        self.sub_location = rospy.Subscriber("/turtlebot_locations", String, self.location_callback)
 
     def callback(self, laser):
         threshold = 1
@@ -34,9 +39,15 @@ class Turtlebot:
                 self.move_random.linear.x = random_velocity_linear_x
                 self.move_random.angular.z = 0.0
 
-        self.pub.publish(self.move_random)
+        self.pub_cmd_vel.publish(self.move_random)
 
+    def odom_callback(self, odom):
+            location_data = f"{self.name}: {odom.pose.pose.position.x}, {odom.pose.pose.position.y}"
+            self.pub_location.publish(location_data)
 
+    def location_callback(self, location_data):
+        if not location_data.data.startswith(self.name):
+            print(f"{self.name} received location data: {location_data.data}")
 
 def stop_turtlebots(turtlebots):
     stop_twist = Twist()
