@@ -1,0 +1,8 @@
+prefix=/home/eba/multi_agent_ws/devel
+
+Name: turtlebot_navigation_and_mapping
+Description: Description of turtlebot_navigation_and_mapping
+Version: 0.0.1
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: turtlesim
