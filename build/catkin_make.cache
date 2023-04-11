@@ -1,2 +1,0 @@
-turtlebot_navigation_and_mapping
--DCATKIN_DEVEL_PREFIX=/home/eba/multi_agent_ws/devel -DCMAKE_INSTALL_PREFIX=/home/eba/multi_agent_ws/install -G Unix Makefiles
