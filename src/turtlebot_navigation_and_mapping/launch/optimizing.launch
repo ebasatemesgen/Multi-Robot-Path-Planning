@@ -1,0 +1,50 @@
+<launch>
+  <arg name="rviz_arg" default="-d $(find turtlebot_navigation_and_mapping)/rviz/explore.rviz" />
+
+  <!-- Gazebo -->
+  <include file="$(find turtlebot3_gazebo)/launch/turtlebot3_house.launch">
+    <arg name="model" value="burger"/>
+    <arg name="x_pos" value="0.0"/>
+    <arg name="y_pos" value="0.0"/>
+  </include>
+
+  <arg name="tb3_0_urdf" default="$(find turtlebot3_description)/urdf/turtlebot3_burger.urdf.xacro" />
+  <arg name="tb3_1_urdf" default="$(find turtlebot3_description)/urdf/turtlebot3_burger.urdf.xacro" />
+
+  <param name="tb3_0/robot_description" command="$(find xacro)/xacro $(arg tb3_0_urdf)" />
+  <param name="tb3_1/robot_description" command="$(find xacro)/xacro $(arg tb3_1_urdf)" />
+
+  <!-- Spawn tb3_1 -->
+  <node name="spawn_tb3_0" pkg="gazebo_ros" type="spawn_model" args="-param tb3_0/robot_description -urdf -x 0.0 -y 0.0 -z 0.0 -model tb3_0" />
+  <node name="spawn_tb3_1" pkg="gazebo_ros" type="spawn_model" args="-param tb3_1/robot_description -urdf -x 2.0 -y 0.0 -z 0.0 -model tb3_1" />
+
+  <!-- Loop to control multiple TurtleBots -->
+  <group ns="tb3_0">
+    <include file="$(find turtlebot3_navigation)/launch/move_base.launch">
+      <arg name="model" value="burger"/>
+    </include>
+
+    <include file="$(find turtlebot3_slam)/launch/turtlebot3_slam.launch">
+      <arg name="slam_methods" value="gmapping" />
+      <arg name="open_rviz"    value="false" />
+    </include>
+  </group>
+
+  <group ns="tb3_1">
+    <include file="$(find turtlebot3_navigation)/launch/move_base.launch">
+      <arg name="model" value="burger"/>
+    </include>
+
+    <include file="$(find turtlebot3_slam)/launch/turtlebot3_slam.launch">
+      <arg name="slam_methods" value="gmapping" />
+      <arg name="open_rviz"    value="false" />
+    </include>
+  </group>
+
+  <!-- Node for autonomous mapping -->
+  <node name="explore_0" pkg="turtlebot_navigation_and_mapping" type="explore.py" output="screen" ns="tb3_0"/>
+  <!-- <node name="explore_1" pkg="turtlebot_navigation_and_mapping" type="explore.py" output="screen" ns="tb3_1"/> -->
+
+  <!-- Rviz -->
+  <node name="rviz" pkg="rviz" type="rviz" args="$(arg rviz_arg)"/>
+</launch>

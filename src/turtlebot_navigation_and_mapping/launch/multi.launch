@@ -1,0 +1,35 @@
+<launch>
+    <!-- Set the default turtlebot model -->
+    <arg name="model" default="burger"/>
+    <arg name="world_file" default="$(find turtlebot3_gazebo)/worlds/turtlebot3_house.world"/>
+
+    <!-- Launch Gazebo with the specified world -->
+    <include file="$(find turtlebot3_gazebo)/launch/turtlebot3_house.launch">
+        <arg name="world_file" value="$(arg world_file)"/>
+    </include>
+
+    <!-- Launch the gmapping node for each TurtleBot -->
+    <group ns="tb1">
+        <include file="$(find turtlebot3_slam)/launch/turtlebot3_gmapping.launch"/>
+    </group>
+    <group ns="tb2">
+        <include file="$(find turtlebot3_slam)/launch/turtlebot3_gmapping.launch"/>
+    </group>
+    <group ns="tb3">
+        <include file="$(find turtlebot3_slam)/launch/turtlebot3_gmapping.launch"/>
+    </group>
+
+    <!-- Launch the move_base node for each TurtleBot -->
+    <group ns="tb1">
+        <include file="$(find turtlebot3_navigation)/launch/move_base.launch"/>
+    </group>
+    <group ns="tb2">
+        <include file="$(find turtlebot3_navigation)/launch/move_base.launch"/>
+    </group>
+    <group ns="tb3">
+        <include file="$(find turtlebot3_navigation)/launch/move_base.launch"/>
+    </group>
+
+    <!-- Include your custom Python exploration script -->
+    <node name="exploration" pkg="your_package" type="your_script.py" output="screen"/>
+</launch>
