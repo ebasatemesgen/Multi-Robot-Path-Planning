@@ -1,0 +1,8 @@
+prefix=/home/eba/multi_agent_ws/install
+
+Name: bag_tools
+Description: Description of bag_tools
+Version: 0.0.3
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: rosbag

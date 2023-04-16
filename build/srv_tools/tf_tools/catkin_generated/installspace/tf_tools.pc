@@ -1,0 +1,8 @@
+prefix=/home/eba/multi_agent_ws/install
+
+Name: tf_tools
+Description: Description of tf_tools
+Version: 0.0.3
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
