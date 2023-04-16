@@ -2,10 +2,9 @@
 <package format="2">
   <name>turtlebot_navigation_and_mapping</name>
   <version>0.0.1</version>
-  <description>The goal is to use the turtlebot to map an environment and then navigate within the map using the slam_toolbox</description>
+  <description>Multirobot navigaiton with slam</description>
 
-  <maintainer email="yael.bshalom@gmail.com">yael Ben Shalom</maintainer>
-  <author email="yael.bshalom@gmail.com">yael Ben Shalom</author>
+  <maintainer email="ebagirma8@gmail.com">Ebasa Girma</maintainer>
 
   <!-- One license tag required, multiple allowed, one license per tag -->
   <license>GPLv3</license>
